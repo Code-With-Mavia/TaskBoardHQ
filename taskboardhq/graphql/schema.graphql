@@ -38,7 +38,21 @@ type User {
 }
 
 type Project{
-    id:ID!
 
+}
+
+type Task{
+
+}
+
+type ProjectUser{
+
+}
+
+type Comment{
+
+}
+
+type ActivityLogger{
 
 }
