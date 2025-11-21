@@ -9,13 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('project_users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->enum('role', ['viewer', 'member', 'manager'])->default('member');
+            $table->timestamp('added_at')->useCurrent();
             $table->timestamps();
+            $table->unique(['project_id', 'user_id']); // Avoid duplicates
         });
     }
+
 
     /**
      * Reverse the migrations.
