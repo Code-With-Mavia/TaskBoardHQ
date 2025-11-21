@@ -2,28 +2,47 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    use HasFactory;
     protected $fillable = [
-    'name',
-    'description',
-    'status',
-    'created_by',
-    'updated_by',
+        'name',
+        'description',
+        'owner_id',
+        'status',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
 
     public function tasks()
     {
         return $this->hasMany(Task::class);
     }
 
-    public function users()
+    public function activityLogs()
     {
-        return $this->belongsToMany(User::class, 'project_users');
+        return $this->hasMany(ActivityLog::class);
     }
 
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'project_users')
+                    ->withPivot('role', 'added_at')
+                    ->withTimestamps();
+    }
+
+    public function projectUsers()
+    {
+        return $this->hasMany(ProjectUser::class);
+    }
 }

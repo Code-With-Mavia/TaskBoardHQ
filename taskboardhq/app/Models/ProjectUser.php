@@ -2,17 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ProjectUser extends Model
 {
-    use HasFactory;
+    protected $table = 'project_users';
+
     protected $fillable = [
-    'project_id',
-    'user_id',
-    'role',
+        'project_id',
+        'user_id',
+        'role',
+        'added_at',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function project()
     {
@@ -23,5 +30,4 @@ class ProjectUser extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }

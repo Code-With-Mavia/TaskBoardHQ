@@ -2,19 +2,40 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ActivityLog extends Model
 {
-    use HasFactory;
     protected $fillable = [
-    'user_id',
-    'action',
-    'table_name',
-    'record_id',
-    'data',
-    'ip_address',
-];
+        'user_id',
+        'project_id',
+        'task_id',
+        'action',
+        'metadata',
+    ];
 
+    protected $casts = [
+        'metadata' => 'array',
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
 }

@@ -2,29 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    use HasFactory;
     protected $fillable = [
-    'user_id',
-    'project_id',
-    'title',
-    'description',
-    'status',
-    'due_date',
-    'priority',
+        'project_id',
+        'assigned_to',
+        'title',
+        'description',
+        'priority',
+        'status',
+        'due_date',
     ];
-     public function project()
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
+    public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
-    public function user()
+    public function assignee()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'assigned_to');
     }
 
     public function comments()
@@ -32,4 +37,8 @@ class Task extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
 }

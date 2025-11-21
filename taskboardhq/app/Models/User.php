@@ -2,57 +2,53 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'password'=>'hashed',
+        'avatar_url',
+        'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-    ];
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'password' => 'hashed',
-    ];
-
-    public function projects()
+    public function projectsOwned()
     {
-        return $this->belongsToMany(Project::class, 'project_users');
+        return $this->hasMany(Project::class, 'owner_id');
     }
 
-    public function tasks()
+    public function assignedTasks()
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class, 'assigned_to');
+    }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
     }
 
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'project_users')
+                    ->withPivot('role', 'added_at')
+                    ->withTimestamps();
+    }
+
+    public function projectUsers()
+    {
+        return $this->hasMany(ProjectUser::class);
     }
 }
