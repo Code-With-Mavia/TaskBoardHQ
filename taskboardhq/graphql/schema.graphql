@@ -30,12 +30,15 @@ type User {
     "Unique email address."
     email: String!
 
-    "When the email was verified."
-    email_verified_at: DateTime
-
     "When the account was created."
     created_at: DateTime!
 
     "When the account was last updated."
     updated_at: DateTime!
+}
+
+type Project{
+    id:ID!
+
+
 }

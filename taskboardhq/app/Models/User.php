@@ -3,22 +3,27 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    use HasFactory, Notifiable;
+
     protected $fillable = [
         'name',
         'email',
-        'password'=>'hashed',
+        'password',
         'avatar_url',
         'role',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relationships
-    |--------------------------------------------------------------------------
-    */
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
 
     public function projectsOwned()
     {
@@ -43,8 +48,8 @@ class User extends Authenticatable
     public function projects()
     {
         return $this->belongsToMany(Project::class, 'project_users')
-                    ->withPivot('role', 'added_at')
-                    ->withTimestamps();
+            ->withPivot('role', 'added_at')
+            ->withTimestamps();
     }
 
     public function projectUsers()
